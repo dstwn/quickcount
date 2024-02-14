@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistik Pemilu</title>
+    <style>
+        /* CSS untuk tampilan halaman */
+        /* Style untuk judul */
+        h1 {
+            text-align: center;
+        }
+        /* Style untuk konten */
+        .container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            width: 30%;
+        }
+        /* Style untuk tabel */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Statistik Pemilu</h1>
+    <div class="container">
+        <div class="card">
+            <h2>Kandidat</h2>
+            <ul id="kandidatList"></ul>
+            <div> <div id="progres_side"></div></div>
+        </div>
+        <div class="card">
+            <h2>Statistik</h2>
+            <div id="statistikTable"></div>
+        </div>
+        <div class="card">
+            <h2>Grafik Persentase Suara</h2>
+            <canvas id="chart"></canvas>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Fungsi untuk mengambil data dari URL JSON
+        function getData(url, callback) {
+            fetch(url)
+                .then(response => response.json())
+                .then(data => callback(data))
+                .catch(error => console.error('Error:', error));
+        }
+
+        // Panggil fungsi getData untuk mengambil data kandidat
+        getData('https://sirekap-obj-data.kpu.go.id/pemilu/ppwp.json', function(data) {
+            // Tampilkan data kandidat
+            const kandidatList = document.getElementById('kandidatList');
+            Object.values(data).forEach(kandidat => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${kandidat.nomor_urut}. ${kandidat.nama}`;
+                kandidatList.appendChild(listItem);
+            });
+        });
+
+        // Panggil fungsi getData untuk mengambil data wilayah
+        getData('https://sirekap-obj-data.kpu.go.id/wilayah/pemilu/ppwp/0.json', function(data) {
+            // Tampilkan data wilayah
+            const wilayahList = document.getElementById('wilayahList');
+            wilayahData = data.reduce((acc, curr) => {
+                acc[curr.kode] = curr.nama;
+                return acc;
+            }, {});
+            Object.entries(wilayahData).forEach(([kode, nama]) => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${nama} (${kode})`;
+                wilayahList.appendChild(listItem);
+            });
+        });
+
+        // Panggil fungsi getData untuk mengambil data statistik
+        getData('https://sirekap-obj-data.kpu.go.id/pemilu/hhcw/ppwp.json', function(data) {
+            // Tampilkan data statistik
+            const statistikTable = document.getElementById('statistikTable');
+            const progres_side = document.getElementById('progres_side');
+            progres_side.innerHTML = `
+              Progress Data = ${data.progres.progres} TPS dari  ${data.progres.total} TPS (${data.chart.persen}%) 
+              Diperbarui pada ${data.ts}
+            `;
+            statistikTable.innerHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Wilayah</th>
+                            <th>H. ANIES RASYID BASWEDAN, Ph.D. - Dr. (H.C.) H. A. MUHAIMIN ISKANDAR</th>
+                            <th>H. PRABOWO SUBIANTO - GIBRAN RAKABUMING RAKA</th>
+                            <th>H. GANJAR PRANOWO, S.H., M.I.P. - Prof. Dr. H. M. MAHFUD MD</th>
+                            <th>Status Progress</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${Object.entries(data.table).map(([kode, { '100025': total1, '100026': total2, '100027': total3, status_progress, persen }]) => {
+                            const wilayahNama = wilayahData[kode];
+                            const total = total1 + total2 + total3;
+                            const persen1 = ((total1 / total) * 100).toFixed(2);
+                            const persen2 = ((total2 / total) * 100).toFixed(2);
+                            const persen3 = ((total3 / total) * 100).toFixed(2);
+                            return `
+                                <tr>
+                                    <td>${wilayahNama}</td>
+                                    <td>${total1} Suara - ${persen1}%</td>
+                                    <td>${total2} Suara - ${persen2}%</td>
+                                    <td>${total3} Suara - ${persen3}%</td>
+                                    <td> ${persen} %</td>
+                                </tr>
+                            `;
+                        }).join('')}
+                    </tbody>
+                </table>
+            `;
+
+            // Data untuk grafik
+            const labels = ['H. ANIES RASYID BASWEDAN, Ph.D. - Dr. (H.C.) H. A. MUHAIMIN ISKANDAR', 'H. PRABOWO SUBIANTO - GIBRAN RAKABUMING RAKA', 'H. GANJAR PRANOWO, S.H., M.I.P. - Prof. Dr. H. M. MAHFUD MD'];
+            const dataValues = [data.chart['100025'], data.chart['100026'], data.chart['100027']];
+
+            // Buat grafik
+            const ctx = document.getElementById('chart').getContext('2d');
+            const myChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Suara Kandidat',
+                        data: dataValues,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
