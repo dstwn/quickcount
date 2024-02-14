@@ -7,23 +7,24 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
 </head>
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <div class="card p-3">
-                    <h2 class="card-title">Grafik Persentase Suara</h2>
-                    <canvas id="chart"></canvas>
-                    <div> <div id="progres_side"></div></div>
-                </div>
+<div class="container">
+    <h1 style="text-align: center;">Statistik Pemilu 2024</h1>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card p-3">
+                <h3 class="card-title">Grafik Persentase Suara</h3>
+                <canvas id="chart"></canvas>
+                <div> <div id="progres_side"></div></div>
             </div>
-            <div class="col">
-                <div class="card p-3">
-                    <h2 class="card-title">Statistik</h2>
-                    <table id="statistikTable" class="table table-striped"></table>
-                </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card p-3">
+                <h3 class="card-title">Statistik</h3>
+                <table id="statistikTable" class="table table-striped"></table>
             </div>
         </div>
     </div>
+</div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -70,12 +71,13 @@
             const statistikTable = document.getElementById('statistikTable');
             const progres_side = document.getElementById('progres_side');
             progres_side.innerHTML = `
-              Progress Data = ${data.progres.progres} TPS dari  ${data.progres.total} TPS (${data.chart.persen}%) 
-              Diperbarui pada ${data.ts}
+              Progress Data ${data.progres.progres} TPS dari  ${data.progres.total} TPS (${data.chart.persen}%) 
+              Diperbarui pada ${data.ts} @ KPU RI
             `;
             statistikTable.innerHTML = `
                 <thead>
                     <tr>
+                        <th>No</th>
                         <th>Wilayah</th>
                         <th>H. ANIES RASYID BASWEDAN, Ph.D. - Dr. (H.C.) H. A. MUHAIMIN ISKANDAR</th>
                         <th>H. PRABOWO SUBIANTO - GIBRAN RAKABUMING RAKA</th>
@@ -84,6 +86,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                    ${i = 1}
                     ${Object.entries(data.table).map(([kode, { '100025': total1, '100026': total2, '100027': total3, status_progress, persen }]) => {
                         const wilayahNama = wilayahData[kode];
                         const total = total1 + total2 + total3;
@@ -92,6 +95,7 @@
                         const persen3 = ((total3 / total) * 100).toFixed(2);
                         return `
                             <tr>
+                                <td>${i++}</td>
                                 <td>${wilayahNama}</td>
                                 <td>${total1} Suara - ${persen1}%</td>
                                 <td>${total2} Suara - ${persen2}%</td>
@@ -130,7 +134,11 @@
 
             // Data untuk grafik
             const labels = ['H. ANIES RASYID BASWEDAN, Ph.D. - Dr. (H.C.) H. A. MUHAIMIN ISKANDAR', 'H. PRABOWO SUBIANTO - GIBRAN RAKABUMING RAKA', 'H. GANJAR PRANOWO, S.H., M.I.P. - Prof. Dr. H. M. MAHFUD MD'];
-            const dataValues = [data.chart['100025'], data.chart['100026'], data.chart['100027']];
+            const dataValues = [
+            	data.chart['100025'], 
+              data.chart['100026'], 
+              data.chart['100027']
+              ];
 
             // Buat grafik
             const ctx = document.getElementById('chart').getContext('2d');
