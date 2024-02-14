@@ -97,7 +97,7 @@
                                 <td>${total1} Suara - ${persen1}%</td>
                                 <td>${total2} Suara - ${persen2}%</td>
                                 <td>${total3} Suara - ${persen3}%</td>
-                                <td> ${persen} %</td>
+                                <td>${persen}%</td>
                             </tr>
                         `;
                     }).join('')}
@@ -106,7 +106,27 @@
 
             // Inisialisasi DataTable
             $(document).ready(function() {
-                $('#statistikTable').DataTable();
+                $('#statistikTable').DataTable({
+                    "paging": true,
+                    "lengthChange": false,
+                    "searching": true,
+                    "ordering": true,
+                    "info": true,
+                    "autoWidth": false,
+                    "responsive": true,
+                    "language": {
+                        "paginate": {
+                            "previous": "Sebelumnya",
+                            "next": "Selanjutnya"
+                        },
+                        "search": "Cari:",
+                        "info": "Menampilkan _START_ hingga _END_ dari _TOTAL_ entri",
+                        "infoEmpty": "Menampilkan 0 hingga 0 dari 0 entri",
+                        "zeroRecords": "Tidak ditemukan data yang sesuai",
+                        "emptyTable": "Tidak ada data yang tersedia",
+                        "lengthMenu": "Tampilkan _MENU_ entri"
+                    }
+                });
             });
 
             // Data untuk grafik
