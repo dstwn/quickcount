@@ -82,7 +82,7 @@
               Progress Data ${data.progres.progres} TPS dari  ${data.progres.total} TPS (${data.chart.persen}%) 
               diperbarui pada ${data.ts} @ KPU RI
             `; */
-            const timestamp = new Date(data.ts).toLocaleString();
+            const timestamp = new Date(data.ts).toLocaleString('id-ID', { day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric' });
             document.getElementById('subtitle').innerHTML = `diperbarui pada ${timestamp} Progress Data ${data.progres.progres} TPS dari  ${data.progres.total} TPS (${data.chart.persen}%) `;
             statistikTable.innerHTML = `
                 <thead>
