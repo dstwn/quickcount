@@ -21,6 +21,7 @@
                 </h6>
 <li>Publikasi Form Model C/D Hasil adalah hasil penghitungan suara di TPS dengan tujuan untuk memudahkan akses informasi publik.</li>
 <li>Penghitungan suara yang dilakukan oleh KPPS, rekapitulasi hasil penghitungan suara dan penetapan hasil pemilu dilakukan secara berjenjang dalam rapat pleno terbuka oleh PPK, KPU Kabupaten/Kota, KPU Provinsi dan KPU berdasarkan ketentuan peraturan perundang-undangan.</li>
+<li>Data berasal dari <b>KPU RI</b></li>
 
             </div>
         </div>
@@ -81,7 +82,8 @@
               Progress Data ${data.progres.progres} TPS dari  ${data.progres.total} TPS (${data.chart.persen}%) 
               diperbarui pada ${data.ts} @ KPU RI
             `; */
-            document.getElementById('subtitle').innerHTML = `diperbarui pada ${data.ts} Progress Data ${data.progres.progres} TPS dari  ${data.progres.total} TPS (${data.chart.persen}%) `
+            const timestamp = new Date(data.ts).toLocaleString();
+            document.getElementById('subtitle').innerHTML = `diperbarui pada ${timestamp} Progress Data ${data.progres.progres} TPS dari  ${data.progres.total} TPS (${data.chart.persen}%) `;
             statistikTable.innerHTML = `
                 <thead>
                     <tr>
