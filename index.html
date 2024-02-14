@@ -9,12 +9,19 @@
 </head>
 <div class="p-4">
     <h1 class="p-4" style="text-align: center;">HASIL HITUNG SUARA PEMILU PRESIDEN & WAKIL PRESIDEN RI 2024</h1>
+    <h6  style="text-align: center;" id="subtitle"></h6>
     <div class="row">
         <div class="col-md-4">
             <div class="card p-3">
                 <h3 class="card-title">Grafik Persentase Suara</h3>
                 <canvas id="chart"></canvas>
                 <div> <div id="progres_side"></div></div>
+                <h6>
+                Disclaimer
+                </h6>
+<li>Publikasi Form Model C/D Hasil adalah hasil penghitungan suara di TPS dengan tujuan untuk memudahkan akses informasi publik.</li>
+<li>Penghitungan suara yang dilakukan oleh KPPS, rekapitulasi hasil penghitungan suara dan penetapan hasil pemilu dilakukan secara berjenjang dalam rapat pleno terbuka oleh PPK, KPU Kabupaten/Kota, KPU Provinsi dan KPU berdasarkan ketentuan peraturan perundang-undangan.</li>
+
             </div>
         </div>
         <div class="col-md">
@@ -70,10 +77,11 @@
             // Tampilkan data statistik
             const statistikTable = document.getElementById('statistikTable');
             const progres_side = document.getElementById('progres_side');
-            progres_side.innerHTML = `
+/*             progres_side.innerHTML = `
               Progress Data ${data.progres.progres} TPS dari  ${data.progres.total} TPS (${data.chart.persen}%) 
-              Diperbarui pada ${data.ts} @ KPU RI
-            `;
+              diperbarui pada ${data.ts} @ KPU RI
+            `; */
+            document.getElementById('subtitle').innerHTML = `diperbarui pada ${data.ts} Progress Data ${data.progres.progres} TPS dari  ${data.progres.total} TPS (${data.chart.persen}%) `
             statistikTable.innerHTML = `
                 <thead>
                     <tr>
