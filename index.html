@@ -5,54 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Statistik Pemilu</title>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css">
-    <style>
-        /* CSS untuk tampilan halaman */
-        /* Style untuk judul */
-        h1 {
-            text-align: center;
-        }
-        /* Style untuk konten */
-        .container {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 20px;
-        }
-        .card {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-            width: 30%;
-        }
-        /* Style untuk tabel */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-        th, td {
-            border: 1px solid #ccc;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+
 </head>
 <body>
     <h1>Statistik Pemilu</h1>
     <div class="container">
         <div class="card">
-            <h2>Kandidat</h2>
-            <ul id="kandidatList"></ul>
+            <h2 class="card-title">Kandidat</h2>
+            <ul id="kandidatList" class="list-group"></ul>
             <div> <div id="progres_side"></div></div>
         </div>
         <div class="card">
-            <h2>Statistik</h2>
+            <h2 class="card-title">Statistik</h2>
             <table id="statistikTable" class="table table-striped"></table>
         </div>
         <div class="card">
-            <h2>Grafik Persentase Suara</h2>
+            <h2 class="card-title">Grafik Persentase Suara</h2>
             <canvas id="chart"></canvas>
         </div>
     </div>
